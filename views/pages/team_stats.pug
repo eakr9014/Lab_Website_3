@@ -21,7 +21,7 @@ div.container
     - if(games)
       for game in games
         tr
-          td= game.game_date
+          td= game.game_date.getMonth() + "/" + game.game_date.getDay() + "/" + game.game_date.getFullYear()
           td= game.visitor_name
           td= game.home_score
           td= game.visitor_score

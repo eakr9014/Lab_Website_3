@@ -8,20 +8,28 @@ div.container
     div.col-4
       div.card
         //- TODO: Modify the pug code below to conditionally set the image_src
-        - let image_src = '../../resources/img/helmet.jpg'
-
-        img.card-img-top#player_img(src= image_src, alt="Football Player")
+        
+        - if(new_names)
+          img.card-img-top#player_img(src= info.img_src, alt="Football Player")
+        - if(names)
+          img.card-img-top#player_img(src= '../../resources/img/helmet.jpg', alt="Football Player")
         div.card-body.mx-auto
           form.form(action="/player_info/select_player", method="get")
             select.custom-select(name="player_choice", onchange="this.form.submit()")
-              option(selected) Select Player
+              - if(new_names)
+                for player in new_names
+                  - if(player.id==info.id)
+                    option(value=player.id selected)= player.name
+                  - else
+                    option(value=player.id)= player.name
               - if(names)
+                option(selected) Select Player
                 for player in names
                   option(value=player.id)= player.name
               //- TODO: Populate the select with player options. Set the value to the player's id and display the player's name.
     div.col-8
       div.table-responsive
-      if(info)
+      - if(new_names)
         table.table
           //- TODO: Set the player's information. On select, fill in the player's information in each of the field below. You will need to calculate the average rushing, receiving, and passing yards.
           tr
@@ -42,7 +50,7 @@ div.container
           tr
             td= "Receiving Yards: " + info.receiving_yards
             td= "Avg. Receiving Yards: " + (info.receiving_yards/total.count).toFixed(2)
-      else
+      - if(names)
         table.table
           tr
             th Year

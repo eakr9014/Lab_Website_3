@@ -206,14 +206,14 @@ app.get('/player_info', function(req, res) {
 });
 
 app.get('/player_info/select_player', function(req, res) {
-  var names = "SELECT id, name FROM football_players;";
+  var n = "SELECT id, name FROM football_players;";
   var player = "SELECT * from football_players WHERE id='" + req.query.player_choice + "';";
   var played = "SELECT COUNT(*) FROM football_games INNER JOIN football_players ON football_players.id\
                 = ANY(football_games.players) WHERE football_players.id ='" + req.query.player_choice + "';";
 
   db.task('get-everything', task => {
       return task.batch([
-          task.any(names),
+          task.any(n),
           task.any(player),
           task.any(played)
       ]);
@@ -221,7 +221,7 @@ app.get('/player_info/select_player', function(req, res) {
   .then(data => {
   	res.render('pages/player_info',{
   			my_title: "Player Info",
-        names: data[0],
+        new_names: data[0],
   			info: data[1][0],
   			total: data[2][0]
   		})
@@ -232,7 +232,7 @@ app.get('/player_info/select_player', function(req, res) {
           request.flash('error', err);
           res.render('pages/player_info',{
       			my_title: "Player Info",
-            names: '',
+            new_names: '',
       			info: '',
       			total: ''
           })
